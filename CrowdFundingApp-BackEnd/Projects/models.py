@@ -9,7 +9,7 @@ class Project(models.Model):
     id = models.BigAutoField(primary_key=True)
     title = models.CharField(max_length=255)
     details = models.TextField()
-    total_target = models.DecimalField(max_digits=10, decimal_places=2)  # 250,000 EGP
+    total_target = models.DecimalField(max_digits=10, decimal_places=2) 
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     owner = models.ForeignKey(User, on_delete=models.CASCADE,null=True)

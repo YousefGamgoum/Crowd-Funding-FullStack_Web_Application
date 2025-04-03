@@ -10,10 +10,10 @@ urlpatterns = [
     path('api/logout_api/', logout_api, name='logout_api'),
     
     path('api/projects/', get_projects, name='get_projects'),
-    path('api/projects/', create_project, name='create_project'),
+    path('api/projects/create/', create_project, name='create_project'),
     path('api/projects/<int:code>/', get_project, name='get_project'),
-    path('api/projects/<int:code>/', update_project, name='edit_project'),
-    path('api/projects/<int:code>/', delete_project, name='delete_project'),
+    path('api/projects/update/<int:code>/', update_project, name='edit_project'),
+    path('api/projects/delete/<int:code>/', delete_project, name='delete_project'),
     path('api/projects/search/', search_projects_by_date, name='search_projects_by_date'),
 ]
 

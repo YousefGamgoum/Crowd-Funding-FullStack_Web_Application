@@ -3,10 +3,10 @@
 "http://127.0.0.1:8000/api/logout_api/",
 
 "http://127.0.0.1:8000/api/projects/", (GET, for view all projects)
-"http://127.0.0.1:8000/api/projects/", (POST, To create new project)
+"http://127.0.0.1:8000/api/projects/create/", (POST, To create new project)
 "http://127.0.0.1:8000/api/projects/{id}/", (GET, To get project with id)
-"http://127.0.0.1:8000/api/projects/{id}/", (PUT, To edit project)
-"http://127.0.0.1:8000/api/projects/{id}/", (DELETE, To delete project)
+"http://127.0.0.1:8000/api/projects/update/{id}/", (PUT, To edit project)
+"http://127.0.0.1:8000/api/projects/delete/{id}/", (DELETE, To delete project)
 
 "http://127.0.0.1:8000/api/projects/search/", (GET, To search project with date)
 to search by date you have to send it with query params your request will be sent like this

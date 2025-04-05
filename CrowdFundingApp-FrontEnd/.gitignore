@@ -1,0 +1,42 @@
+# See https://github.com/github/gitignore/blob/main/Node.gitignore for more
+
+# dependencies
+/node_modules
+
+# production
+/build
+/dist
+
+# misc
+.DS_Store
+.env
+.env.*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# testing
+/coverage
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# editor settings
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS specific
+Thumbs.db
+Desktop.ini
+
+# Optional if you're using TypeScript
+*.tsbuildinfo
+
+# local server files
+*.local

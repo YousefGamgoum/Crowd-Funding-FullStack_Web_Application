@@ -3,6 +3,7 @@
 "http://127.0.0.1:8000/api/logout_api/",
 
 "http://127.0.0.1:8000/api/projects/", (GET, for view all projects)
+"http://127.0.0.1:8000/api/projects/user/", (GET, for view user's projects)
 "http://127.0.0.1:8000/api/projects/create/", (POST, To create new project)
 "http://127.0.0.1:8000/api/projects/{id}/", (GET, To get project with id)
 "http://127.0.0.1:8000/api/projects/update/{id}/", (PUT, To edit project)

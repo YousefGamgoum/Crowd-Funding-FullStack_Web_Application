@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'rest_framework',
     'corsheaders',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,11 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = ["http://*"]
 
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework.authentication.TokenAuthentication',
+#     ],
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticated',
+#     ]
+# }

@@ -6,7 +6,10 @@ from .models import Project
 from .serializers import ProjectSerializer
 from django.core.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken.models import Token
+
 from datetime import datetime, timedelta
+from Users.models import User
 # Create your views here.
 
 
@@ -22,37 +25,36 @@ def get_project(request,code):
     serializer = ProjectSerializer(project) 
     return Response(serializer.data)
 
-@api_view(['POST'])
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
+def list_user_projects(request):
+    projects = Project.objects.filter(owner=request.user)
+    serializer = ProjectSerializer(projects, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
 def create_project(request):
     title = request.data.get("title")
     details = request.data.get("details")
     total_target = request.data.get("total_target")
     start_time = request.data.get("start_time")
     end_time = request.data.get("end_time")
-
+    userId = request.data.get("userID")
     try:
-        user = request.user
-
+        userdd = User.objects.get(id=userId)
         project = Project(
             title=title,
             details=details,
             total_target=total_target,
             start_time=start_time,
             end_time=end_time,
-            owner=user
+            owner=userdd
         )
         project.save()
 
         return Response({
             "message": "Project created successfully",
-            "project": {
-                "title": project.title,
-                "details": project.details,
-                "total_target": project.total_target,
-                "start_time": project.start_time,
-                "end_time": project.end_time
-            }
+            "project": ProjectSerializer(project).data
         }, status=status.HTTP_201_CREATED)
 
     except ValueError as e:
@@ -66,11 +68,12 @@ def create_project(request):
 
 
 @api_view(['PUT'])
-@permission_classes([IsAuthenticated])
 def update_project(request, code):
+    userId = request.data.get("UserID")
+    userdd = User.objects.get(id=userId)    
     try:
         project = Project.objects.get(id=code)
-        if project.owner != request.user:
+        if project.owner != userdd:
             return Response({"error": "You can only edit your own projects."}, status=status.HTTP_403_FORBIDDEN)
 
         project.title = request.data.get("title", project.title)
@@ -79,17 +82,12 @@ def update_project(request, code):
         project.start_time = request.data.get("start_time", project.start_time)
         project.end_time = request.data.get("end_time", project.end_time)
 
+
         project.save()
 
         return Response({
             "message": "Project updated successfully",
-            "project": {
-                "title": project.title,
-                "details": project.details,
-                "total_target": project.total_target,
-                "start_time": project.start_time,
-                "end_time": project.end_time
-            }
+            "project": ProjectSerializer(project).data
         }, status=status.HTTP_200_OK)
 
     except Project.DoesNotExist:
@@ -97,13 +95,14 @@ def update_project(request, code):
     except ValidationError as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
     
-@api_view(['DELETE'])
-@permission_classes([IsAuthenticated])
+@api_view(['POST'])
 def delete_project(request, code):
+    userId = request.data.get("UserID")
+    userdd = User.objects.get(id=userId)
     try:
         project = Project.objects.get(id=code)
 
-        if project.owner != request.user:
+        if project.owner != userdd:
             return Response({"error": "You can only delete your own projects."}, status=status.HTTP_403_FORBIDDEN)
 
         project.delete()

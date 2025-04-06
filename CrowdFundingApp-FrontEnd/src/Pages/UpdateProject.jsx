@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Row, Col } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import {
+  redirect,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 
-const UpdateProject = ({ onCancel, onUpdateSuccess }) => {
-  const { id } = useParams(); // ✅ صح كده
+const UpdateProject = () => {
+  // { onCancel, onUpdateSuccess }
+  const [success,issuccess] = useState(false)
+  const { id } = useParams();
+
+  const onCancel = () => {
+    navigate("/home");
+  };
+
   const [project, setProject] = useState({
     title: "",
     details: "",
@@ -14,7 +26,9 @@ const UpdateProject = ({ onCancel, onUpdateSuccess }) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [pr, setpr] = useState([]);
 
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchProject = async () => {
       try {
@@ -22,7 +36,7 @@ const UpdateProject = ({ onCancel, onUpdateSuccess }) => {
           `http://127.0.0.1:8000/api/projects/${id}/`
         );
         const projectData = response.data;
-        
+        setpr(projectData);
         setProject({
           title: projectData.title,
           details: projectData.details,
@@ -30,7 +44,9 @@ const UpdateProject = ({ onCancel, onUpdateSuccess }) => {
           startDate: projectData.start_time
             ? projectData.start_time.slice(0, 16)
             : "",
-          endDate: projectData.end_time ? projectData.end_time.slice(0, 16) : "",
+          endDate: projectData.end_time
+            ? projectData.end_time.slice(0, 16)
+            : "",
         });
       } catch (error) {
         console.error("Error fetching project:", error);
@@ -45,12 +61,21 @@ const UpdateProject = ({ onCancel, onUpdateSuccess }) => {
     setProject({ ...project, [e.target.name]: e.target.value });
   };
 
+  const UserID = localStorage.getItem("userId");
+  useEffect(() => {
+    if (pr.owner) {
+      if (pr.owner != UserID) {
+        navigate("/notfound");
+      }
+    }
+  }, [pr]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
-    const UserID = localStorage.getItem("userId");
-    const formData = new FormData();  
+
+    const formData = new FormData();
     formData.append("title", project.title);
     formData.append("details", project.details);
     formData.append("total_target", project.total_target);
@@ -69,9 +94,7 @@ const UpdateProject = ({ onCancel, onUpdateSuccess }) => {
         }
       );
 
-      if (onUpdateSuccess) {
-        onUpdateSuccess();
-      }
+     
     } catch (error) {
       console.error("Error updating project:", error);
       if (error.response) {
@@ -80,7 +103,13 @@ const UpdateProject = ({ onCancel, onUpdateSuccess }) => {
         setError("Network error - is the Django server running?");
       }
     } finally {
-      setIsSubmitting(false);
+      
+      issuccess(true)
+      setTimeout(()=>{
+        setIsSubmitting(false);
+        navigate("/home")
+        issuccess(false)
+      },2000)
     }
   };
 
@@ -93,8 +122,16 @@ const UpdateProject = ({ onCancel, onUpdateSuccess }) => {
             {error}
           </div>
         )}
+        {success && (
+              <div class="alert alert-success" role="alert">
+                Updateed Successfully - Redirecting.....
+              </div>
+            )}
 
-        <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow-sm">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white p-4 rounded shadow-sm"
+        >
           <div className="mb-3">
             <label className="form-label fw-bold">Project Title</label>
             <input
@@ -188,6 +225,7 @@ const UpdateProject = ({ onCancel, onUpdateSuccess }) => {
             >
               {isSubmitting ? "Updating..." : "Update Project"}
             </Button>
+            
           </div>
         </form>
       </div>

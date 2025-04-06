@@ -1,0 +1,46 @@
+* {
+  font-weight: 700;
+  text-align: center;
+  /* background-color: rgb(242, 239, 231); */
+}
+.home {
+  /* width: 85rem; */
+  margin-top: 3rem;
+  text-align: center;
+  /* color: white;
+        background-color: rgb(187, 97, 187); */
+}
+
+.btnn {
+  background-color: rgb(72, 166, 167);
+  border: none;
+  margin-top: 4rem;
+}
+
+
+
+.row {
+  /* margin-top: 6rem; */
+  margin-left: 3rem;
+}
+.previous {
+  margin-top: 5rem;
+}
+#carouselExample {
+  height: 60rem !important;
+    margin-top: 4rem;
+}
+
+#slide {
+  width: 85rem;
+}
+
+#navStyle{
+  background-color: rgb(0, 55, 59) !important;
+}
+#containernav{
+  width: 80%;
+  margin: auto;
+  background-color: rgb(0, 55, 59) !important;
+  border-radius: 0rem 0rem 1.25rem 1.25rem;
+}

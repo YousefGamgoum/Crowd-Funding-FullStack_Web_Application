@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Button, Row, Col } from "react-bootstrap";
+import { useNavigate } from "react-router";
 
 const CreateProject = () => {
+  const [success,issuccess] = useState(false)
+  const navigate = useNavigate()
   const [project, setProject] = useState({
     title: "",
     details: "",
@@ -44,14 +47,14 @@ const CreateProject = () => {
             }
         );
 
-        alert("Project created successfully!");
-        setProject({
-            title: "",
-            details: "",
-            total_target: "",
-            startDate: "",
-            endDate: "",
-        });
+        // alert("Project created successfully!");
+        // setProject({
+        //     title: "",
+        //     details: "",
+        //     total_target: "",
+        //     startDate: "",
+        //     endDate: "",
+        // });
     } catch (error) {
         console.error("Error creating project:", error);
         if (error.response) {
@@ -60,7 +63,12 @@ const CreateProject = () => {
             setError("Network error - is the Django server running?");
         }
     } finally {
+        issuccess(true)
+        setTimeout(()=>{
         setIsSubmitting(false);
+        navigate("/home")
+        issuccess(false)
+      },2000)
     }
 };
 
@@ -68,6 +76,11 @@ const CreateProject = () => {
     <div className="container py-5">
       <h1 className="mb-4 text-center">Create New Project</h1>
       <div className="col-md-8 col-lg-6 mx-auto">
+      {success && (
+              <div class="alert alert-success" role="alert">
+                Updateed Successfully - Redirecting.....
+              </div>
+            )}
         <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow-sm">
           <div className="mb-3">
             <label className="form-label fw-bold">Project Title</label>
